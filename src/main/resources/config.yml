@@ -1,0 +1,154 @@
+#############################################
+#  RANDOM        ____    ___                #
+#               |  _ \  |_ _|               #
+#               | |_) |  | |                #
+#               |  _ <   | |                #
+#               |_| \_\ |___|        ITEMS  #
+#############################################
+
+# RandomItems2 - Main Plugin Configuration
+
+
+# ==== GENERAL OPTIONS ====
+# Random items will spawn near players in these worlds:
+worlds: []
+
+# Random items are spawned near the player after a random amount of time within the below interval (both inclusive).
+# Times are given in ticks (1 second = 20 ticks)
+min-give-time: 200
+max-give-time: 400
+
+# An interval for the amount of time it takes for a spawned item to actually "pop" into the world. In other words, how long it takes the item to manifest
+# Times are given in ticks (1 second = 20 ticks)
+min-pop-time: 100
+max-pop-time: 140
+
+# This is a list of players who will not receive random items
+# This list may be configured manually but is usually updated by the in-game `exempt` and `toggle` commands.
+# This list may contain player usernames or UUIDs. The in-game commands will use UUIDs.
+exempt: []
+
+# ==== ITEM GENERATION
+
+# Item tiers provide a progression for players to receive increasingly advanced sets of random items.
+# To configure the plugin to always give entirely random items, replace the below with the following:
+#item-tiers:
+#  -
+#    items:
+#      - all
+item-tiers:
+  -
+    # All the items that can generate around players in this tier
+    items:
+      # You can use the item ID of any item
+      - stick
+      # Or a minecraft item tag [see: https://minecraft.wiki/w/Item_tag_(Java_Edition)]
+      - "#logs"
+      # Another form of item ID, with an explicit `minecraft:` namespace
+      - "minecraft:stone"
+      - cobblestone
+      # If the plugin ProjectKorraScrolls is installed you can use the following item type, which will spawn as any random scroll the player could otherwise find in chests:
+      # - scroll
+    # Items the player needs to deposit into a tier-up zone to progress to the next tier
+    # In the below example, the player needs to deposit a wooden axe and 3 sticks to progress to from tier 1 to tier 2
+    next-tier-requires:
+      wooden_axe: 1
+      stick: 3
+  - items:
+      - "#logs"
+      - stick
+      # Items can be added in shorthand as above, but can also be added as a yml object like below for additional configuration
+      - type: stone
+        # The maximum amount of the item that can spawn in the generated stack. By default, this is 1
+        # Item counts will always be limited to the maximum stack size of that item
+        max-count: 10
+        # The weight of an item determines how frequently it spawns. It is a number that is at least 1 which determines how likely an item is to spawn.
+        # The default weight assigned to items if not specified is 5, so that a scale from 1-10 may be used to conveniently make items more common/rare than the default, however there's nothing limiting the weight from being set above 10
+        weight: 10
+      - cobblestone
+      - type: wooden_axe
+        # Enchantment tiers influence how an item is randomly enchanted. By default, items aren't randomly enchanted.
+        # All possible values for enchantment tiers are:
+        # Tier 1: 45% chance that a tool will have any random enchant with a level of 1
+        # Tier 2: 35% chance that a tool will have a valid random enchant with a valid level
+        # Tier 3: 25% chance that a tool will have a valid random enchant with a level of up to 10
+        # Tier 4: Same as tier 3 but without curses
+        # Tier 5: Same as tier 4 but with a 45% chance that it has a second valid random enchant with a level of up to 10
+        # Tier 6: Same as tier 5 but with a 5% chance of a non-tool item having any enchant with a level up to 5
+        # Tier 7: Same as tier 6 but with  15% chance for the non-tool to have an enchant up to level 10
+        enchant-tier: 2
+      - type: wooden_pickaxe
+        enchant-tier: 2
+      - type: wooden_sword
+        enchant-tier: 2
+    next-tier-requires:
+      stone_sword: 4
+      # Like with random items, you can use an item tag. In this case, it means the player must deposit 3 of any pickaxe
+      "#pickaxes": 3
+      cobblestone: 64
+      stone: 10
+  - items:
+      - "#logs"
+      - stick
+      - type: stone
+        max-count: 10
+        # You can also configure the minimum amount of the item that will spawn. If max and min counts are the same, the item will always spawn with that quantity.
+        # By default, the minimum count is 1
+        min-count: 10
+      - cobblestone
+      - iron_ore
+      - type: stone_axe
+        enchant-tier: 3
+      - type: stone_pickaxe
+        enchant-tier: 3
+      - type: stone_sword
+        enchant-tier: 3
+      - type: spawner
+        # You can set the entities that a mob spawner can potentially come with when generated
+        # The entities list may include entities from the "default-spawner-excludes" configuration option, bypassing it
+        # You can also set an entity list on a hopper minecart to turn it into a spawner minecart
+        # If not specified, a spawner block can generate with any vanilla entity that isn't in "default-spawner-excludes" by default, but a hopper minecart will not become a spawner minecart
+        entities:
+          - zombie
+          - skeleton
+          - spider
+        # Spawners can cycle between multiple entities. You can set the minimum and maximum number of entities a spawner can spawn
+        min-entities: 1
+        max-entities: 2
+    next-tier-requires:
+      iron_ingot: 10
+  - items:
+      # Special item type that includes all vanilla items
+      - type: all
+        enchant-tier: 3
+        # You can still specify min and max entities for "all", as well as an entity list, and it will affect any spawners generated
+        min-entities: 2
+        max-entities: 2
+
+# Items that should not be included in the item type "all"
+all-excludes:
+  - ender_dragon_spawn_egg
+  - wither_spawn_egg
+
+# Mobs not included in spawners when they don't have an entities list set
+default-spawner-excludes:
+  - ender_dragon
+  - wither
+
+# ==== MISC OPTIONS ====
+
+# Configures the way Random Shears act when used. If an invalid value is used this will default to "damage-spammable"
+# damage-spammable - Entities will take a heart of damage when sheared. The shears will not perform their usual action (e.g., removing wool from a sheep). Entities will drop a random item when right clicked with shears, even if they are under no-damage-ticks and can't take damage. This mode encourages spam clicking shearable mobs for maximum output of random items.
+# damage - Like spammable damage, entities will take a heart of damage when sheared and drop a random item. Unlike spammable damage, items will not drop when used during no damage ticks.
+# cooldown - Right clicking a shearable entity drops a random item with a cooldown specified below.
+# shear - Right clicking a shearable entity shears the entity but drops a random item instead. Mooshrooms will still drop mushrooms.
+# disabled - Random shears act like normal shears and don't drop random items.
+random-shears-behavior: damage-spammable
+
+# If the random shears are set to "cooldown" above, this is how long the player must wait before shearing the same mob again.
+# Values less than or equal to 0 allow spam-shearing the same mob over and over for random items with no cooldown.
+# This value is set in ticks. (20 seconds = 1 tick)
+random-shears-cooldown: 0
+
+# If true, shulker boxes won't be filled with random items
+disable-random-shulker-boxes: false

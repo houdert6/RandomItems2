@@ -1,0 +1,58 @@
+name: RandomItems2
+description: Highly configurable random items plugin
+main: com.houdert6.ri2.RandomItems2
+version: 2.0
+api-version: 1.21.4
+author: houdert6
+softdepend: ['ProjectKorraScrolls', 'PlaceholderAPI']
+
+#commands
+
+commands:
+   randomitems2:
+      description: The main plugin command
+      usage: '/<command> [action]'
+      permission: randomitems2.command
+      aliases: [randomitems, randomitem2, randomitem, random2, ritem, ritem2, ri, ri2, ritems, ritems2, randomi2, randomi]
+      permission-message: &cYou do not have access to this command.
+permissions:
+   randomitems2.admin:
+      description: Allows access to all admin commands.
+      children:
+         randomitems2.exempt: true
+         randomitems2.reload: true
+         randomitems2.give: true
+         randomitems2.spawner: true
+         randomitems2.tier: true
+         randomitems2.tierupzone: true
+      default: op
+   randomitems2.player:
+      description: Allows access to standard RandomItems2 commands for players
+      children:
+         randomitems2.command: true
+         randomitems2.toggle: true
+      default: true
+   randomitems2.exempt:
+      description: Allows someone to toggle the spawning of random items around any player
+      default: op
+   randomitems2.toggle:
+      description: Allows someone to toggle the spawning of random items around themselves
+      default: op
+   randomitems2.reload:
+      description: Allows reloading the plugin configuration
+      default: op
+   randomitems2.give:
+      description: Allows the giving of special items
+      default: op
+   randomitems2.spawner:
+      description: Allows giving players custom spawners
+      default: op
+   randomitems2.command:
+      description: Allows players to use the /ritems2 command as a whole.
+      default: op
+   randomitems2.tier:
+      description: Allows viewing and manipulating the item tier of a player
+      default: op
+   randomitems2.tierupzone:
+      description: Allows creating a new tier-up zone in the world
+      default: op
